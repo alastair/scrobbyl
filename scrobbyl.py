@@ -40,7 +40,9 @@ def main(file):
 	echonest.pp(song)
 
 	if "response" in song and "status" in song["response"] \
-			and song["response"]["status"]["message"] == "Success":
+			and song["response"]["status"]["message"] == "Success" \
+			and len(song["response"]["songs"]) > 0:
+
 		track = song["response"]["songs"][0]["title"]
 		artist = song["response"]["songs"][0]["artist_name"]
 		now = time.time()
