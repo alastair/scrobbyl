@@ -11,10 +11,12 @@ def fingerprint(file):
 	platform = os.uname()[0]
 	if platform == "Darwin":
 		codegen = "./codegen.Darwin"
+		path = ".:"+os.getenv("PATH")
 	elif platform == "Linux":
 		codegen = "./codegen.Linux-i686"
+		path = os.getenv("PATH")
 	proclist = [codegen, os.path.abspath(file), "0", "20"]
-	p = subprocess.Popen(proclist, stdout=subprocess.PIPE)
+	p = subprocess.Popen(proclist, env={"PATH":path}, stdout=subprocess.PIPE)
 	code = p.communicate()[0]
 	return json.loads(code)
 
