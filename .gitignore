@@ -1,3 +1,4 @@
 *.pyc
 echonestconf.py
 *.so
+codegen.*
