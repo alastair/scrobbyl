@@ -50,12 +50,10 @@ def _do_raw_lastfm_query(url):
 	try:
 		f = urllib2.urlopen(f)
 	except urllib2.URLError, e:
-		print e
 		raise
 
 	tree = xml.etree.ElementTree.ElementTree(file=f)
 	result=_etree_to_dict(tree.getroot())
-	print result
 	return result
 
 def _do_lastfm_post(url, data):
@@ -64,7 +62,6 @@ def _do_lastfm_post(url, data):
 	try:
 		f = urllib2.urlopen(f, data)
 	except urllib2.URLError, e:
-		print e
 		raise
 
 
@@ -77,7 +74,6 @@ def _do_lastfm_query(type, method,**kwargs):
 		args[k] = v.encode("utf8")
 	s = ""
 	for k in sorted(args.keys()):
-		print k,args[k]
 		s+=k+args[k]
 	s+=secret
 	if "sk" in args.keys() or "token" in args.keys():
@@ -90,7 +86,6 @@ def _do_lastfm_query(type, method,**kwargs):
 			'',
 			urllib.urlencode(args),
 			''))
-		print url
 		return _do_raw_lastfm_query(url)
 	elif type == "POST":
 		url=urlparse.urlunparse(('http',
@@ -108,6 +103,7 @@ def _make_session(token):
 	fp = open(os.path.expanduser("~/.lastfmsess"), "w")
 	fp.write(key)
 	fp.close()
+	print "session successfully created. thank you."
 
 def scrobble(artist, track):
 	# OK, not the real start time. but that'll do
@@ -118,9 +114,15 @@ if __name__=="__main__":
 	if len(sys.argv) > 1:
 		if sys.argv[1] == "auth":
 			t = _get_auth_token()
-			print "http://www.last.fm/api/auth/?api_key=%s&token=%s" % (key, t)
-			time.sleep(10)
-			_make_session(t)
+			print "Please open this url then come back to this window: http://www.last.fm/api/auth/?api_key=%s&token=%s" % (key, t)
+			i = 0
+			while i < 5:
+				try:
+					_make_session(t)
+					break
+				except urllib2.HTTPError ,e:
+					print e.code
+				time.sleep(10)
 	else:
 		scrobble("The New Pornographers", "Failsafe")
 
