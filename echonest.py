@@ -21,7 +21,7 @@ def _do_en_query(method, postdata=None, **kwargs):
                 '',
                 urllib.urlencode(args),
                 ''))
-	print >> sys.stderr, "opening url",url
+	#print >> sys.stderr, "opening url",url
         f = urllib2.Request(url)
         try:
                 f = urllib2.urlopen(f)
