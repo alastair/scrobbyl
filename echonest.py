@@ -5,14 +5,15 @@ import sys
 import urllib2
 import urlparse
 import urllib
-import echonestconf
 import json
+
+API_KEY = "F4LP3UJVBPYSPVKRZ"
 
 def _do_en_query(method, postdata=None, **kwargs):
         args = {}
         for k,v in kwargs.items():
                 args[k] = v.encode("utf8")
-	args["api_key"] = echonestconf.echonest_key
+	args["api_key"] = API_KEY
 	args["format"]="json"
 
         url=urlparse.urlunparse(('http',
